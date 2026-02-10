@@ -1,14 +1,14 @@
 # для float
 ```bash
-rm -rf build && mkdir build && cd build && cmake .. && make && ./main && cd ..
+rm -rf build && cmake -B build -S . && cmake --build build && ./build/main
 ```
 ### пример выхода: 
-```terminal
+```
 arr_type = float, sum = -0.213894
 ```
 # для double
 ```bash
-rm -rf build && mkdir build && cd build && cmake -DUSE_DOUBLE=ON .. && make && ./main && cd ..
+rm -rf build && cmake -DUSE_DOUBLE=ON -B build -S . && cmake --build build && ./build/main
 ```
 ### пример выхода: 
 ```
