@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[]) {
 
-    size_t n = 40'000;
+    size_t n = 5'000;
 
     if (argc > 1) n = atoi(argv[1]);
 
@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
     const auto start = std::chrono::steady_clock::now();
     for (size_t iter = 0; iter < 1000; iter++) {
 
-        
         #pragma omp parallel for
         for (size_t i = 0; i < n; i++) {
             double sum = 0.0;
@@ -42,23 +41,17 @@ int main(int argc, char* argv[]) {
         }
         
         double max_diff = 0.0;
-        #pragma omp parallel for
+        #pragma omp parallel for reduction(max:max_diff)
         for (size_t i = 0; i < n; i++) {
 
             double curr_diff = std::fabs(x_new[i] - x_old[i]);
             
-            #pragma omp critical
-            if (curr_diff > max_diff) {
-                max_diff = curr_diff;
-            }
-
+            if (curr_diff > max_diff) max_diff = curr_diff;
         }
         if (max_diff < epsilon) break;
 
         #pragma omp parallel for
-        for (size_t i = 0; i < n; i++) {
-            x_old[i] = x_new[i];
-        }
+        for (size_t i = 0; i < n; i++) x_old[i] = x_new[i];
     }
     const auto end = std::chrono::steady_clock::now();
 

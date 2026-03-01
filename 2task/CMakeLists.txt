@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenMP REQUIRED)
 
-set(TASKS 1main 2main 3main)
+set(TASKS 1main 2main 3_1main 3_2main)
 
 foreach(TASK ${TASKS})
     add_executable(${TASK} ${TASK}.cpp)
