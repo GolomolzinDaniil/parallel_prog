@@ -27,7 +27,9 @@ int main(int argc, char* argv[]) {
 
     double epsilon = 1e-6;
     const auto start = std::chrono::steady_clock::now();
-    for (size_t iter = 0; iter < 1000; iter++) {
+
+    size_t num_iter = 1000;
+    for (size_t iter = 0; iter < num_iter; iter++) {
 
         #pragma omp parallel for
         for (size_t i = 0; i < n; i++) {
