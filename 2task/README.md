@@ -29,3 +29,9 @@ cmake -B build -S . -DSND_VERSION=ON
 cmake --build build
 OMP_NUM_THREADS=N ./build/main <n>
 ```
+
+### *3schedule
+cd 3schedule
+cmake -B build -S .
+cmake --build build
+./run.bash
