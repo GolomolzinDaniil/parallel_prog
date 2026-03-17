@@ -31,7 +31,9 @@ OMP_NUM_THREADS=N ./build/main <n>
 ```
 
 ### *3schedule
+```bash
 cd 3schedule
 cmake -B build -S .
 cmake --build build
 ./run.bash
+```
