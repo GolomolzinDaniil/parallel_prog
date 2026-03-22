@@ -21,14 +21,33 @@ int main(int argc, char* argv[]) {
     double h = (b - a) / nstep;
     double sum = 0.0;
 
+    // const auto start = std::chrono::steady_clock::now();
+    // #pragma omp parallel for reduction(+:sum) schedule(static)
+    // for (int i = 0; i < nstep; i++)
+    // {
+    //     sum += func(a + h * (i + 0.5));
+    // }    
+    // sum *= h;
+    // const auto end = std::chrono::steady_clock::now();
+
+
     auto start = std::chrono::steady_clock::now();
-  
-    #pragma omp parallel for reduction(+:sum) schedule(static)
-    for (int i = 0; i < nstep; i++) {
-        sum += func(a + h * (i + 0.5));
+    #pragma omp parallel reduction(+:sum)
+    {
+        size_t nthreads = omp_get_num_threads();
+        size_t threadid = omp_get_thread_num();
+        size_t per_thread = nstep / nthreads;
+        size_t lb = threadid * per_thread;
+        size_t ub = (threadid == nthreads - 1) ? (nstep) : (lb + per_thread);
+
+        double x = a + h * (lb + 0.5);
+        for (size_t i = lb; i < ub; i++)
+        {   
+            sum += func(x);
+            x += h;
+        }
     }
     sum *= h;
-
     auto end = std::chrono::steady_clock::now();
 
     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
